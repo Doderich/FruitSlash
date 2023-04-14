@@ -1,5 +1,5 @@
 // path is used to draw a given 2DPath
-export function path(
+export function drawPath(
   ctx,
   p,
   x,
