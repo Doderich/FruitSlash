@@ -1,4 +1,5 @@
-import * as G from "../graphics/graphics.mjs";
+import * as drawshap from "../graphics/draw_shapes.mjs";
+import { distance } from "../graphics/utitl.mjs";
 
 export function button(
   x,
@@ -8,23 +9,23 @@ export function button(
   fsNormal = "gray",
   fsTouched = "white"
 ) {
-  let isTouched = false;
-  let identifier = undefined; // kein Touch-Punkt
+  let isTouchedStatus = false;
+  let touchingObjectIdentifier = undefined; // kein Touch-Punkt
   let startTouchTime = undefined;
 
   function draw(ctx) {
-    if (isTouched) {
-      G.circle(ctx, x, y, radius, fsTouched);
+    if (isTouchedStatus) {
+      drawshap.circle(ctx, x, y, radius, fsTouched);
     } else {
-      G.circle(ctx, x, y, radius, fsNormal);
+      drawshap.circle(ctx, x, y, radius, fsNormal);
     }
   }
   // isInside: bei TouchStart aufgerufen
   // ti: identifier, tx/ty: Touch-Koodinaten
-  function isInside(ctx, ti, tx, ty) {
-    isTouched = G.distance(x, y, tx, ty) < radius;
-    if (isTouched) {
-      identifier = ti;
+  function isTouched(ctx, ti, tx, ty) {
+    isTouchedStatus = distance(x, y, tx, ty) < radius;
+    if (isTouchedStatus) {
+      touchingObjectIdentifier = ti;
       startTouchTime = new Date();
     }
   }
@@ -34,9 +35,9 @@ export function button(
   // reset: bei TouchEnd aufgerufen;
   // ti: identifier
   function reset(ti) {
-    if (ti === identifier) {
+    if (ti === touchingObjectIdentifier) {
       isTouched = false;
-      identifier = undefined;
+      touchingObjectIdentifier = undefined;
       const deltaTime = new Date() - startTouchTime;
       if (deltaTime < 300) {
         cb();
@@ -45,5 +46,5 @@ export function button(
       }
     }
   }
-  return { draw, isInside, move, reset };
+  return { draw, isTouched, move, reset };
 }
