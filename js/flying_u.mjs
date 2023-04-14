@@ -1,4 +1,4 @@
-import * as G from "./graphics.mjs";
+import * as G from "./graphics/graphics.mjs";
 
 export function flying_u(x, y) {
   let isTouched = false;

@@ -1,8 +1,8 @@
 // import { initGraphics } from "./js/graphics.mjs";
-import * as G from "./js/graphics.mjs";
-import { button } from "./js/button.mjs";
+import * as G from "./js/graphics/graphics.mjs";
+import { button } from "./js/interactions/button.mjs";
 import { flying_u } from "./js/flying_u.mjs";
-import { enemy } from "./js/enemy.mjs";
+import { enemy } from "./js/graphics/enemy.mjs";
 
 window.onload = function () {
   let interactiveObjects = [];

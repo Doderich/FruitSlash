@@ -1,4 +1,4 @@
-import * as G from "./graphics.mjs";
+import * as G from "../graphics/graphics.mjs";
 
 export function button(
   x,
@@ -45,7 +45,5 @@ export function button(
       }
     }
   }
-
-  function rotate(angle) {}
-  return { draw, isInside, move, reset, rotate };
+  return { draw, isInside, move, reset };
 }

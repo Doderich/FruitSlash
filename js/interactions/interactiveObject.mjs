@@ -1,0 +1,9 @@
+class InteractiveObject{
+    
+    constructor(){
+
+    }
+
+    draw(){},
+
+}
