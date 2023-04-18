@@ -1,7 +1,7 @@
 import * as drawshap from "../graphics/draw_shapes.mjs";
 export function Enemy(x, y, identifier) {
   const id = identifier;
-  let info = { x, y, angle: 0, scale: 20 };
+  let info = { x, y, angle: 0, scale: 5 };
   let isTouchedStatus = false;
   let touchingObjectIdentifier = undefined;
   let transformationMatrix = undefined;
@@ -11,10 +11,7 @@ export function Enemy(x, y, identifier) {
 
   let path = () => {
     let tmppath = new Path2D();
-    tmppath.moveTo(0, 0);
-    tmppath.lineTo(2, 0);
-    tmppath.lineTo(2, 2);
-    tmppath.lineTo(0, 2);
+    tmppath.arc(0, 0, 5, 0, 2 * Math.PI);
     tmppath.closePath();
     return tmppath;
   };
@@ -58,6 +55,10 @@ export function Enemy(x, y, identifier) {
   }
   function move() {
     info.y = info.y + 1;
+    if (info.y >= window.innerHeight - 100) {
+      console.log(id, "Hat das Dorf erreicht");
+      isDead = true;
+    }
     console.log("moved to:", info);
   }
   function reset(touchindentifier) {

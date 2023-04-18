@@ -29,7 +29,7 @@ export function button(
       startTouchTime = new Date();
     }
   }
-
+  function imIDead() {}
   function move(x, y) {}
 
   // reset: bei TouchEnd aufgerufen;
@@ -39,12 +39,8 @@ export function button(
       isTouched = false;
       touchingObjectIdentifier = undefined;
       const deltaTime = new Date() - startTouchTime;
-      if (deltaTime < 300) {
-        cb();
-      } else {
-        console.log("too slow");
-      }
+      cb();
     }
   }
-  return { draw, isTouched, move, reset };
+  return { draw, isTouched, move, reset, imIDead };
 }
