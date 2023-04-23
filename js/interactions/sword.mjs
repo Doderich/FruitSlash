@@ -5,8 +5,39 @@ const path = new Path2D(
 );
 
 export function Sword() {
-  function drawSword(ctx, x, y, angle) {
-    drawPath(ctx, path, x - 30, y - 78, angle, 2, "black", "white");
+  let angle = (Math.PI / 2) * 3.5;
+  let sc = 2;
+  let fillStyle = "black";
+  let lineWidth = 0.1;
+  let strokeStyle = "blacke";
+
+  let tranformationMatrix = undefined;
+  function drawSword(ctx, x, y) {
+    //angle += 0.1; Drehung
+    ctx.save(); // Sicherung der globalen Attribute
+    ctx.translate(x, y);
+    ctx.scale(sc, sc);
+    ctx.rotate(angle);
+    ctx.translate(-30 * 0.5, -78 * 0.5);
+
+    let tranformationMatrix = ctx.getTransform();
+
+    ctx.fillStyle = fillStyle;
+    ctx.lineWidth = lineWidth;
+    ctx.strokeStyle = strokeStyle;
+    ctx.fill(path);
+    ctx.stroke(path);
+    ctx.restore(); // Wiederherstellung der globalen Attribute
+    return tranformationMatrix;
   }
-  return { drawSword };
+
+  function swordHitbox(ctx, x, y, swordMatrix) {
+    ctx.save();
+    ctx.translate(-8, -115);
+    ctx.rect(x, y, 25, 115);
+    let matrix = ctx.getTransform();
+    ctx.restore();
+    return matrix;
+  }
+  return { drawSword, swordHitbox };
 }

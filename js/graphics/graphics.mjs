@@ -1,3 +1,5 @@
+import { draw_goal } from "./draw_goal.mjs";
+
 export function initGraphics(drawCallback) {
   const canvas = document.getElementById("canvas");
   const ctx = canvas.getContext("2d");
@@ -7,7 +9,6 @@ export function initGraphics(drawCallback) {
   resize(ctx, canvas);
   //Start main Animation Loop
   const startTime = new Date();
-
   mainAnimationLoop();
 
   function mainAnimationLoop() {
@@ -16,7 +17,8 @@ export function initGraphics(drawCallback) {
       new Date().getMilliseconds() - startTime.getMilliseconds();
     ctx.resetTransform();
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-
+    ctx.rect(0, window.innerHeight - 100, window.innerWidth, 100);
+    draw_goal(ctx, window.innerWidth, window.innerHeight);
     //Calls draw function given in gamelogic.mjs
     drawCallback(ctx, deltaTime);
     // Callback: anonyme Funktion, 3 Parameter
