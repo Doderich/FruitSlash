@@ -57,6 +57,7 @@ export function initLogic() {
         })
       );
     } else if (gameState == "menu") {
+      interactiveObjects = [];
     } else if (gameState == "ongoing") {
     } else if (gameState == "win") {
     } else if (gameState == "lose") {
