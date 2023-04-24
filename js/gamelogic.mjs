@@ -3,7 +3,7 @@ import { initInteraction } from "./interactions/interaction.mjs";
 import { checkForCircleRectangleCollision } from "./graphics/utitl.mjs";
 import * as swordObject from "./interactions/sword.mjs";
 import { button } from "./interactions/button.mjs";
-import { modeButton, /*timeButton,*/ startButton } from "./graphics/menu.mjs";
+import { draw_goal } from "./graphics/draw_goal.mjs";
 
 // interactive objects haben: move(), props {isDead}, draw(), reset(), isTouched()
 // gamestate "menu","ongoing","start","win","lose"
@@ -14,20 +14,31 @@ export function initLogic() {
     initInteraction(interactiveObjects);
   let i = 0;
   const Sword = swordObject.Sword();
+  let hp = 3;
   function draw(ctx, deltaTime) {
-    checkGameState(deltaTime);
-    interactionsObjectsUpdate(interactiveObjects); //
-    if (i == 1) {
-      for (let io of interactiveObjects) {
-        io.move();
-        i = 0;
+    //ctx.resetTransform();
+    //ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+    //ctx.rect(0, window.innerHeight - 100, window.innerWidth, 100);
+    ////Calls draw function given in gamelogic.mjs
+    //draw_goal(ctx, window.innerWidth, window.innerHeight);
+    interactionsObjectsUpdate(interactiveObjects);
+    checkGameState(interactiveObjects, deltaTime);
+    //if (i == 1) {
+    for (let io of interactiveObjects) {
+      if (io.move()) {
+        hp--;
       }
+      if (hp == 0) {
+        gameState = "lose";
+      }
+      i = 0;
     }
+    //}
     for (let i = 0; i < interactiveObjects.length; i++) {
       let state = interactiveObjects[i].props.isDead;
       if (state) {
-        console.log("Ich bin gestorben");
         interactiveObjects[1].props.score++;
+        console.log("Ich bin gestorben");
         interactiveObjects.splice(i, 1);
       }
     }
@@ -46,14 +57,14 @@ export function initLogic() {
     touchCallback((identifier, x, y) => {
       if (gameState == "ongoing") {
         let swordMatrix = Sword.drawSword(ctx, x, y);
-        //let hitboxMatrix = Sword.swordHitbox(ctx, x, y, swordMatrix);
+        let hitgoxmatrix = Sword.swordHitbox(ctx, x, y, swordMatrix);
         let sword = {
           x,
           y,
           width: 24,
           height: 115,
           rotation: 0,
-          matrix: swordMatrix,
+          matrix: hitgoxmatrix,
         };
         if (
           checkCollisionWithInteractiveObject(sword, interactiveObjects, ctx)
@@ -61,73 +72,83 @@ export function initLogic() {
           console.warn("u toched a circle");
         }
       } else if (gameState == "menu") {
-        console.log(
-          interactiveObjects[0].props.type,
-          interactiveObjects[0].props.gotClicked
-        );
-        if (interactiveObjects[0].props.type == "startButton") {
-          gameState = "start";
-          console.log("in menu");
-        }
+        //gameState = "start";
+        console.log("in menu");
       }
     });
     i++;
   }
   function checkGameState(deltaTime) {
     if (gameState == "start") {
-      interactiveObjects = [];
+      interactiveObjects.length = 0;
       interactiveObjects.push(
-        button(50, window.innerHeight - 80, window.innerWidth / 3, 50, () => {
-          gameState = "menu";
-        })
+        button(
+          50,
+          window.innerHeight - 80,
+          window.innerWidth / 3,
+          50,
+          "reset",
+          () => {
+            gameState = "menu";
+          }
+        )
       );
       interactiveObjects.push(Highscore());
       gameState = "ongoing";
     } else if (gameState == "menu") {
-      interactiveObjects = [];
-      interactiveObjects.push(startButton());
-      interactiveObjects.push(modeButton());
-      //interactiveObjects.push(timeButton());
+      interactiveObjects.length = 0;
+      interactiveObjects.push(
+        button(
+          window.innerWidth / 2,
+          window.innerHeight / 4,
+          window.innerWidth / 4,
+          100,
+          "Endless",
+          () => {
+            gameState = "menu";
+          }
+        )
+      );
+      interactiveObjects.push(
+        button(
+          window.innerWidth / 2,
+          window.innerHeight / 4,
+          window.innerWidth / 4,
+          100,
+          "StartGame",
+          () => {
+            gameState = "start";
+          }
+        )
+      );
     } else if (gameState == "ongoing") {
     } else if (gameState == "win") {
     } else if (gameState == "lose") {
+      let highscore = interactiveObjects[1].props.score;
+      console.log("Highscore=> ", highscore);
+      interactiveObjects.length = 0;
+      interactiveObjects.push(
+        button(
+          50,
+          window.innerHeight - 80,
+          window.innerWidth / 3,
+          50,
+          "reset",
+          () => {
+            gameState = "menu";
+          }
+        )
+      );
+      interactiveObjects.push(loseScreen(highscore));
     }
   }
   return { draw };
 }
 
-function spawnEnemies(interactionsObjects, width, height) {
-  const circles = [];
-  const circleRadius = 50;
-  const numCircles = 20;
-  for (let i = 0; i < numCircles; i++) {
-    let validLocation = false;
-    let x, y;
-    while (!validLocation) {
-      x = Math.floor(Math.random() * (width - 2 * circleRadius)) + circleRadius;
-      y =
-        Math.floor(Math.random() * (height - 2 * circleRadius - 200)) +
-        circleRadius;
-      validLocation = true;
-      for (let j = 0; j < i; j++) {
-        const dx = x - circles[j][0];
-        const dy = y - circles[j][1];
-        const distance = Math.sqrt(dx ** 2 + dy ** 2);
-        if (distance < 2 * circleRadius) {
-          validLocation = false;
-          break;
-        }
-      }
-    }
-    circles.push([x, y]);
-    interactionsObjects.push(Enemy(x, y, i));
-  }
-}
 function spawnEnemy(interactiveObjects, width, height, id) {
   let enemys = [];
   for (let io of interactiveObjects) {
     if (io.props.type == "enemy") enemys.push({ x: io.props.x, y: io.props.y });
-    console.log(io);
   }
   while (enemys.length < 11) {
     console.log("in spawn");
@@ -185,6 +206,24 @@ function Highscore() {
     ctx.save();
     ctx.font = "50px Arial";
     ctx.fillText(props.score.toString(), window.innerWidth / 2 - 50, 100);
+    ctx.restore();
+  }
+  function reset() {}
+  function isTouched() {}
+  function move() {}
+  return { move, isTouched, reset, draw, props };
+}
+
+function loseScreen(txt) {
+  let props = { isDead: false, type: "text", text: txt };
+  function draw(ctx) {
+    ctx.save();
+    ctx.font = "50px Arial";
+    ctx.fillText(
+      props.text.toString(),
+      window.innerWidth / 2 - 100,
+      window.innerHeight / 2
+    );
     ctx.restore();
   }
   function reset() {}

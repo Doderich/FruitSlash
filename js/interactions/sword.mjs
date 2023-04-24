@@ -8,25 +8,25 @@ export function Sword() {
   let angle = (Math.PI / 2) * 3.5;
   let sc = 2;
   let fillStyle = "black";
-  let lineWidth = 0.1;
+  let lineWidth = 0.2;
   let strokeStyle = "blacke";
 
   let tranformationMatrix = undefined;
   function drawSword(ctx, x, y) {
-    angle += 0.1;
+    angle += 0.2;
     ctx.save(); // Sicherung der globalen Attribute
+    ctx.fillStyle = fillStyle;
+    ctx.lineWidth = lineWidth;
+    ctx.strokeStyle = strokeStyle;
     ctx.translate(x, y);
     ctx.scale(sc, sc);
     ctx.rotate(angle);
     ctx.translate(-30 * 0.5, -78 * 0.5);
 
-    ctx.fillStyle = fillStyle;
-    ctx.lineWidth = lineWidth;
-    ctx.strokeStyle = strokeStyle;
-    ctx.fill(path);
     ctx.stroke(path);
-    ctx.scale(0, 0);
+    ctx.fill(path);
     ctx.translate(x + 200, y + 200);
+    ctx.rect(0, 0, 10, 10);
     let tranformationMatrix = ctx.getTransform();
     ctx.restore(); // Wiederherstellung der globalen Attribute
     return tranformationMatrix;
@@ -34,11 +34,9 @@ export function Sword() {
 
   function swordHitbox(ctx, x, y, swordMatrix) {
     ctx.save();
-
     ctx.setTransform(swordMatrix);
-    ctx.fillStyle = "blue";
-    ctx.rect(0, 0, 18, 117);
-
+    ctx.rect(y, x, 18, 125);
+    ctx.fill();
     let matrix = ctx.getTransform();
     ctx.restore();
     return matrix;
