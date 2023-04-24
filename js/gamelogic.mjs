@@ -8,8 +8,9 @@ import {
 import * as swordObject from "./interactions/sword.mjs";
 import { button } from "./interactions/button.mjs";
 
+// gamestate "menu","ongoing","start","win","lose"
 export function initLogic() {
-  let gameState = false;
+  let gameState = "ongoing";
   let interactiveObjects = [];
   let { touchCallback, interactionsObjectsUpdate } =
     initInteraction(interactiveObjects);
@@ -17,7 +18,8 @@ export function initLogic() {
   const Sword = swordObject.Sword();
   function draw(ctx, deltaTime) {
     checkGameState(deltaTime);
-    interactionsObjectsUpdate(interactiveObjects);
+
+    interactionsObjectsUpdate(interactiveObjects); //
     if (i == 2) {
       for (let io of interactiveObjects) {
         io.move();
@@ -46,15 +48,15 @@ export function initLogic() {
     i++;
   }
   function checkGameState(deltaTime) {
-    if (!gameState) {
+    if (gameState == "start") {
       interactiveObjects = [];
       for (let i = 20; i < 600 && i < window.innerWidth; i += 80) {
         interactiveObjects.push(Enemy(i, 50, i));
       }
-      gameState = true;
+      gameState = "ongoing";
       interactiveObjects.push(
         button(window.innerWidth - 100, window.innerHeight - 50, 25, () => {
-          gameState = false;
+          gameState = "start";
         })
       );
     }
