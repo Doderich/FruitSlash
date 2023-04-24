@@ -1,6 +1,5 @@
-export let gotClicked = false;
 export function startButton() {
-  let props = {isDead: false, type: "startButton"};  
+  let props = { isDead: false, type: "startButton", gotClicked: false };
   let canvas = document.getElementById("canvas");
   let buttonWidth = 200;
   let buttonHeight = 50;
@@ -10,7 +9,7 @@ export function startButton() {
   let textWidth = undefined;
 
   function draw(ctx) {
-    if (!gotClicked) {
+    if (!props.gotClicked) {
       textWidth = ctx.measureText(buttonText).width;
       ctx.fillStyle = "gray";
       ctx.strokeStyle = "red";
@@ -18,23 +17,18 @@ export function startButton() {
       ctx.strokeRect(buttonX, buttonY, buttonWidth, buttonHeight);
       ctx.fillStyle = "black";
       ctx.font = "20px Arial";
-      ctx.fillText(buttonText, buttonX + buttonWidth / 2 - textWidth / 2, buttonY + buttonHeight/ 2 + (20*0.8) /2);
+      ctx.fillText(
+        buttonText,
+        buttonX + buttonWidth / 2 - textWidth / 2,
+        buttonY + buttonHeight / 2 + (20 * 0.8) / 2
+      );
     }
-  }
-  function getClicked() {
-    return gotClicked;
   }
 
   function update() {}
-  function isTouched(ti, tx, ty) {
-    if (
-      tx >= buttonX &&
-      tx <= buttonX + buttonWidth &&
-      ty >= buttonY &&
-      ty <= buttonY + buttonHeight
-    ) {
-      gotClicked = true;
-    }
+  function isTouched(touchindentifier, touchx, touchy) {
+    console.log("startBtn is Touched");
+    props.gotClicked = true;
   }
   function reset() {}
   function move() {}
@@ -53,7 +47,6 @@ export function startButton() {
     isTouched,
     reset,
     getCoordinates,
-    getClicked,
-    props
+    props,
   };
 }

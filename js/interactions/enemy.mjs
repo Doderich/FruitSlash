@@ -5,8 +5,8 @@ export function Enemy(x, y, identifier) {
     y,
     id: identifier,
     angle: 0,
-    scale: 5,
-    radius: 5,
+    scale: 1,
+    radius: 50,
     type: "enemy",
     isDead: false,
   };

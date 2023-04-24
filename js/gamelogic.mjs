@@ -36,11 +36,24 @@ export function initLogic() {
       io.draw(ctx);
     }
     touchCallback((identifier, x, y) => {
-      let swordMatrix = Sword.drawSword(ctx, x, y);
-      let hitboxMatrix = Sword.swordHitbox(ctx, x, y, swordMatrix);
-      let sword = { x, y, width: 24, height: 115, rotation: 0, hitboxMatrix };
-      if (checkCollisionWithInteractiveObject(sword, interactiveObjects, ctx)) {
-        console.warn("You tocheda circle");
+      if (gameState == "ongoing") {
+        let swordMatrix = Sword.drawSword(ctx, x, y);
+        let hitboxMatrix = Sword.swordHitbox(ctx, x, y, swordMatrix);
+        let sword = { x, y, width: 24, height: 115, rotation: 0, hitboxMatrix };
+        if (
+          checkCollisionWithInteractiveObject(sword, interactiveObjects, ctx)
+        ) {
+          console.warn("u toched a circle");
+        }
+      } else if (gameState == "menu") {
+        console.log(
+          interactiveObjects[0].props.type,
+          interactiveObjects[0].props.gotClicked
+        );
+        if (interactiveObjects[0].props.type == "startButton") {
+          gameState = "start";
+          console.log("in menu");
+        }
       }
     });
     i++;
@@ -48,15 +61,13 @@ export function initLogic() {
   function checkGameState(deltaTime) {
     if (gameState == "start") {
       interactiveObjects = [];
-      for (let i = 20; i < 600 && i < window.innerWidth; i += 80) {
-        interactiveObjects.push(Enemy(i, 50, i));
-      }
-      gameState = "ongoing";
       interactiveObjects.push(
         button(window.innerWidth - 100, window.innerHeight - 50, 25, () => {
-          gameState = "start";
+          gameState = "menu";
         })
       );
+      spawnEnemies(interactiveObjects, innerWidth, window.innerHeight);
+      gameState = "ongoing";
     } else if (gameState == "menu") {
       interactiveObjects = [];
       interactiveObjects.push(startButton());
@@ -68,7 +79,33 @@ export function initLogic() {
   return { draw };
 }
 
-function spawnEnemies() {}
+function spawnEnemies(interactionsObjects, width, height) {
+  const circles = [];
+  const circleRadius = 50;
+  const numCircles = 10;
+  for (let i = 0; i < numCircles; i++) {
+    let validLocation = false;
+    let x, y;
+    while (!validLocation) {
+      x = Math.floor(Math.random() * (width - 2 * circleRadius)) + circleRadius;
+      y =
+        Math.floor(Math.random() * (height - 2 * circleRadius - 200)) +
+        circleRadius;
+      validLocation = true;
+      for (let j = 0; j < i; j++) {
+        const dx = x - circles[j][0];
+        const dy = y - circles[j][1];
+        const distance = Math.sqrt(dx ** 2 + dy ** 2);
+        if (distance < 2 * circleRadius) {
+          validLocation = false;
+          break;
+        }
+      }
+    }
+    circles.push([x, y]);
+    interactionsObjects.push(Enemy(x, y, i));
+  }
+}
 
 function checkCollisionWithInteractiveObject(sword, interactiveObjects, ctx) {
   let transformedTouchpoint = sword.hitboxMatrix.transformPoint(
