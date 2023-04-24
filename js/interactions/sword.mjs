@@ -13,7 +13,7 @@ export function Sword() {
 
   let tranformationMatrix = undefined;
   function drawSword(ctx, x, y) {
-    //angle += 0.1; Drehung
+    //angle += 0.1;
     ctx.save(); // Sicherung der globalen Attribute
     ctx.translate(x, y);
     ctx.scale(sc, sc);
@@ -34,7 +34,8 @@ export function Sword() {
   function swordHitbox(ctx, x, y, swordMatrix) {
     ctx.save();
     ctx.translate(-8, -115);
-    ctx.rect(x, y, 25, 115);
+    ctx.rect(x, y, 18, 115);
+    //ctx.rotate(angle);
     let matrix = ctx.getTransform();
     ctx.restore();
     return matrix;

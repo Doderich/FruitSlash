@@ -24,7 +24,7 @@ export function initInteraction(ios) {
   canvas.addEventListener("touchmove", (evt) => {
     evt.preventDefault();
     for (let t of evt.changedTouches) {
-      console.log(`move ${t.identifier} at ${t.pageX}, ${t.pageY}`);
+      //console.log(`move ${t.identifier} at ${t.pageX}, ${t.pageY}`);
       touchesHistory[t.identifier] = touches[t.identifier];
       touches[t.identifier] = { x: t.pageX, y: t.pageY };
     }

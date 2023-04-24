@@ -12,6 +12,7 @@ export function button(
   let isTouchedStatus = false;
   let touchingObjectIdentifier = undefined; // kein Touch-Punkt
   let startTouchTime = undefined;
+  let props = { x, y, type: "button" };
 
   function draw(ctx) {
     if (isTouchedStatus) {
@@ -42,5 +43,5 @@ export function button(
       cb();
     }
   }
-  return { draw, isTouched, move, reset, imIDead };
+  return { draw, isTouched, move, reset, imIDead, props };
 }

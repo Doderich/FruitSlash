@@ -1,17 +1,24 @@
 import * as drawshap from "../graphics/draw_shapes.mjs";
 export function Enemy(x, y, identifier) {
-  const id = identifier;
-  let info = { x, y, angle: 0, scale: 5 };
+  let props = {
+    x,
+    y,
+    id: identifier,
+    angle: 0,
+    scale: 5,
+    radius: 5,
+    type: "enemy",
+    isDead: false,
+  };
   let isTouchedStatus = false;
   let touchingObjectIdentifier = undefined;
   let transformationMatrix = undefined;
   let inverseTransMatrix = undefined,
     localTouchPoint;
-  let isDead = false;
 
   let path = () => {
     let tmppath = new Path2D();
-    tmppath.arc(0, 0, 5, 0, 2 * Math.PI);
+    tmppath.arc(0, 0, props.radius, 0, 2 * Math.PI);
     tmppath.closePath();
     return tmppath;
   };
@@ -19,20 +26,10 @@ export function Enemy(x, y, identifier) {
     transformationMatrix = drawshap.drawPath(
       ctx,
       path(),
-      info.x,
-      info.y,
-      info.angle,
-      info.scale,
-      "red"
-    );
-
-    transformationMatrix = drawshap.drawPath(
-      ctx,
-      path(),
-      info.x,
-      info.y,
-      info.angle,
-      info.scale,
+      props.x,
+      props.y,
+      props.angle,
+      props.scale,
       "white"
     );
     inverseTransMatrix = DOMMatrix.fromMatrix(transformationMatrix);
@@ -50,16 +47,15 @@ export function Enemy(x, y, identifier) {
     if (isTouchedStatus) {
       touchingObjectIdentifier = touchindentifier;
       console.log("hit!");
-      isDead = true;
+      props.isDead = true;
     }
   }
   function move() {
-    info.y = info.y + 1;
-    if (info.y >= window.innerHeight - 100) {
-      console.log(id, "Hat das Dorf erreicht");
-      isDead = true;
+    props.y = props.y + 1;
+    if (props.y >= window.innerHeight - 100) {
+      console.log(props.id, "Hat das Dorf erreicht");
+      props.isDead = true;
     }
-    console.log("moved to:", info);
   }
   function reset(touchindentifier) {
     if (touchindentifier === touchingObjectIdentifier) {
@@ -67,8 +63,5 @@ export function Enemy(x, y, identifier) {
       touchingObjectIdentifier = undefined;
     }
   }
-  function imIDead() {
-    return isDead;
-  }
-  return { draw, isTouched, move, reset, imIDead, id: id };
+  return { draw, isTouched, move, reset, props };
 }
