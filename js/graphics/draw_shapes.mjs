@@ -40,6 +40,7 @@ export function circle(
   strokeStyle = "#000",
   lineWidth = 1
 ) {
+  ctx.save();
   ctx.fillStyle = fillStyle;
   ctx.lineWidth = lineWidth;
   ctx.strokeStyle = strokeStyle;
@@ -47,6 +48,7 @@ export function circle(
   ctx.arc(x, y, radius, startAngle, endAngle, true);
   ctx.fill();
   ctx.stroke();
+  ctx.restore();
 }
 
 export function line(ctx, x1, y1, x2, y2, strokeStyle = "#fff", lineWidth = 1) {

@@ -3,7 +3,7 @@ import { initInteraction } from "./interactions/interaction.mjs";
 import { checkForCircleRectangleCollision } from "./graphics/utitl.mjs";
 import * as swordObject from "./interactions/sword.mjs";
 import { button } from "./interactions/button.mjs";
-import { startButton } from "./graphics/menu.mjs";
+import { modeButton, /*timeButton,*/ startButton } from "./graphics/menu.mjs";
 
 // interactive objects haben: move(), props {isDead}, draw(), reset(), isTouched()
 // gamestate "menu","ongoing","start","win","lose"
@@ -77,7 +77,7 @@ export function initLogic() {
     if (gameState == "start") {
       interactiveObjects = [];
       interactiveObjects.push(
-        button(window.innerWidth - 100, window.innerHeight - 50, 25, () => {
+        button(50, window.innerHeight - 80, window.innerWidth / 3, 50, () => {
           gameState = "menu";
         })
       );
@@ -86,6 +86,8 @@ export function initLogic() {
     } else if (gameState == "menu") {
       interactiveObjects = [];
       interactiveObjects.push(startButton());
+      interactiveObjects.push(modeButton());
+      //interactiveObjects.push(timeButton());
     } else if (gameState == "ongoing") {
     } else if (gameState == "win") {
     } else if (gameState == "lose") {
