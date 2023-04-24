@@ -1,13 +1,10 @@
 import { Enemy } from "./interactions/enemy.mjs";
 import { initInteraction } from "./interactions/interaction.mjs";
-import {
-  checkCollision,
-  intersects,
-  checkForCircleRectangleCollision,
-} from "./graphics/utitl.mjs";
+import { checkForCircleRectangleCollision } from "./graphics/utitl.mjs";
 import * as swordObject from "./interactions/sword.mjs";
 import { button } from "./interactions/button.mjs";
 
+// interactive objects haben: move(), props {isDead}, draw(), reset(), isTouched()
 // gamestate "menu","ongoing","start","win","lose"
 export function initLogic() {
   let gameState = "ongoing";
@@ -59,10 +56,16 @@ export function initLogic() {
           gameState = "start";
         })
       );
+    } else if (gameState == "menu") {
+    } else if (gameState == "ongoing") {
+    } else if (gameState == "win") {
+    } else if (gameState == "lose") {
     }
   }
   return { draw };
 }
+
+function spawnEnemies() {}
 
 function checkCollisionWithInteractiveObject(sword, interactiveObjects, ctx) {
   let transformedTouchpoint = sword.hitboxMatrix.transformPoint(
