@@ -18,9 +18,12 @@ export function initGraphics(drawCallback) {
     ctx.resetTransform();
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
     ctx.rect(0, window.innerHeight - 100, window.innerWidth, 100);
-    draw_goal(ctx, window.innerWidth, window.innerHeight);
     //Calls draw function given in gamelogic.mjs
+    draw_goal(ctx, window.innerWidth, window.innerHeight);
+    ctx.fillStyle = "blue";
+    ctx.save();
     drawCallback(ctx, deltaTime);
+    ctx.restore();
     // Callback: anonyme Funktion, 3 Parameter
 
     window.requestAnimationFrame(mainAnimationLoop);
