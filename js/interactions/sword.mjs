@@ -13,29 +13,32 @@ export function Sword() {
 
   let tranformationMatrix = undefined;
   function drawSword(ctx, x, y) {
-    //angle += 0.1;
+    angle += 0.1;
     ctx.save(); // Sicherung der globalen Attribute
     ctx.translate(x, y);
     ctx.scale(sc, sc);
     ctx.rotate(angle);
     ctx.translate(-30 * 0.5, -78 * 0.5);
 
-    let tranformationMatrix = ctx.getTransform();
-
     ctx.fillStyle = fillStyle;
     ctx.lineWidth = lineWidth;
     ctx.strokeStyle = strokeStyle;
     ctx.fill(path);
     ctx.stroke(path);
+    ctx.scale(0, 0);
+    ctx.translate(x + 200, y + 200);
+    let tranformationMatrix = ctx.getTransform();
     ctx.restore(); // Wiederherstellung der globalen Attribute
     return tranformationMatrix;
   }
 
   function swordHitbox(ctx, x, y, swordMatrix) {
     ctx.save();
-    ctx.translate(-8, -115);
-    ctx.rect(x, y, 18, 115);
-    //ctx.rotate(angle);
+
+    ctx.setTransform(swordMatrix);
+    ctx.fillStyle = "blue";
+    ctx.rect(0, 0, 18, 117);
+
     let matrix = ctx.getTransform();
     ctx.restore();
     return matrix;
