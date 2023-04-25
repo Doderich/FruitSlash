@@ -111,7 +111,11 @@ export function initLogic() {
       //    "Endless"
       //  )
       //);
-      interactiveObjects.push(startButton());
+      interactiveObjects.push(
+        startButton(() => {
+          gameState = "start";
+        })
+      );
     } else if (gameState == "win") {
     } else if (gameState == "lose") {
       //let highscore = interactiveObjects[1].props.score;
