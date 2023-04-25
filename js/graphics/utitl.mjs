@@ -67,7 +67,7 @@ export function intersects(circle, rect) {
   return cornerDistance_sq <= (circle.props.r ^ 2);
 }
 
-export function checkForCircleRectangleCollision(circle, rectangle, ctx) {
+export function checkForCircleRectangleCollision(circle, rectangle) {
   return checkOverlap(
     circle.props.radius,
     circle.props.x,

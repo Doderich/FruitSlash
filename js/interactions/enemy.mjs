@@ -52,10 +52,12 @@ export function Enemy(x, y, identifier) {
   }
   function move() {
     props.y = props.y + 1;
-    if (props.y >= window.innerHeight - 100) {
+    if (props.y >= window.innerHeight - 150) {
       console.log(props.id, "Hat das Dorf erreicht");
       props.isDead = true;
+      return true;
     }
+    return false;
   }
   function reset(touchindentifier) {
     if (touchindentifier === touchingObjectIdentifier) {

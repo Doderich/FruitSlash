@@ -25,23 +25,25 @@ export function Sword() {
     ctx.strokeStyle = strokeStyle;
     ctx.fill(path);
     ctx.stroke(path);
-    ctx.scale(0, 0);
-    ctx.translate(x + 200, y + 200);
-    let tranformationMatrix = ctx.getTransform();
+
     ctx.restore(); // Wiederherstellung der globalen Attribute
-    return tranformationMatrix;
+    ctx.save();
+    ctx.translate(18, 120);
+    let tranformationMatrix = ctx.getTransform();
+    ctx.restore();
+    let inverseTransMatrix = DOMMatrix.fromMatrix(tranformationMatrix);
+    return inverseTransMatrix.invertSelf();
   }
 
   function swordHitbox(ctx, x, y, swordMatrix) {
-    ctx.save();
+    //ctx.save();
 
-    ctx.setTransform(swordMatrix);
-    ctx.fillStyle = "blue";
-    ctx.rect(0, 0, 18, 117);
-
-    let matrix = ctx.getTransform();
-    ctx.restore();
-    return matrix;
+    //ctx.setTransform(swordMatrix);
+    let inverseTransMatrix = DOMMatrix.fromMatrix(swordMatrix);
+    return inverseTransMatrix.invertSelf();
+    //let matrix = ctx.getTransform();
+    //ctx.restore();
+    //return matrix;
   }
   return { drawSword, swordHitbox };
 }

@@ -170,7 +170,7 @@ function checkCollisionWithInteractiveObject(sword, interactiveObjects, ctx) {
   for (let enemy of interactiveObjects) {
     if (
       enemy.props.type == "enemy" &&
-      checkForCircleRectangleCollision(enemy, sword, ctx)
+      checkForCircleRectangleCollision(enemy, sword)
     ) {
       enemy.props.isDead = true;
       return true;
