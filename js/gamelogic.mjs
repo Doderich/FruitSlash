@@ -46,14 +46,14 @@ export function initLogic() {
     touchCallback((identifier, x, y) => {
       if (gameState == "ongoing") {
         let swordMatrix = Sword.drawSword(ctx, x, y);
-        //let hitboxMatrix = Sword.swordHitbox(ctx, x, y, swordMatrix);
+        let swordHitbox = Sword.swordHitbox(ctx, x, y, swordMatrix);
         let sword = {
           x,
           y,
           width: 24,
           height: 115,
           rotation: 0,
-          matrix: swordMatrix,
+          matrix: swordHitbox,
         };
         if (
           checkCollisionWithInteractiveObject(sword, interactiveObjects, ctx)
@@ -85,12 +85,49 @@ export function initLogic() {
       gameState = "ongoing";
     } else if (gameState == "menu") {
       interactiveObjects = [];
-      interactiveObjects.push(startButton());
-      interactiveObjects.push(modeButton());
-      //interactiveObjects.push(timeButton());
+      interactiveObjects.push(
+        button(
+          window.innerWidth / 2,
+          window.innerHeight / 4,
+          window.innerWidth / 4,
+          100,
+          "Endless",
+          () => {
+            gameState = "menu";
+          }
+        )
+      );
+      interactiveObjects.push(
+        button(
+          window.innerWidth / 2,
+          window.innerHeight / 4,
+          window.innerWidth / 4,
+          100,
+          "Start Game",
+          () => {
+            gameState = "start";
+          }
+        )
+      );
     } else if (gameState == "ongoing") {
     } else if (gameState == "win") {
     } else if (gameState == "lose") {
+      let highscore = interactiveObjects[1].props.score;
+      console.log("Highscore=> ", highscore);
+      interactiveObjects = [];
+      interactiveObjects.push(
+        button(
+          50,
+          window.innerHeight - 80,
+          window.innerWidth / 3,
+          50,
+          "reset",
+          () => {
+            gameState = "menu";
+          }
+        )
+      );
+      interactiveObjects.push(loseScreen(highscore));
     }
   }
   return { draw };
